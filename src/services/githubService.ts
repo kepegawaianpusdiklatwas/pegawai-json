@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:3001/api';
+const API_BASE_URL = import.meta.env.DEV ? 'http://localhost:3001/api' : '/api';
 
 export interface GitHubUploadResponse {
   success: boolean;
@@ -38,10 +38,21 @@ export const uploadToGitHub = async (
 
 export const checkServerHealth = async (): Promise<boolean> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/health`);
+    const response = await fetch(`${API_BASE_URL}/health`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+    
     const result = await response.json();
     return result.status === 'OK';
   } catch (error) {
+    console.error('Server health check failed:', error);
     return false;
   }
 };
