@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Database, CheckCircle, AlertCircle, RefreshCw } from 'lucide-react';
+import { Database, CheckCircle, AlertCircle, RefreshCw, Download } from 'lucide-react';
 import FileUpload from './components/FileUpload';
 import PreviewTable from './components/PreviewTable';
 import { Pegawai, PreviewData } from './types/pegawai';
 import { processExcelFile, generatePreview, mergeData } from './utils/excelProcessor';
-import { uploadToGitHub, checkServerHealth } from './services/githubService';
 
 type AppState = 'upload' | 'preview' | 'success' | 'error';
 
@@ -17,18 +16,11 @@ function App() {
   const [isUpdating, setIsUpdating] = useState(false);
   const [error, setError] = useState<string>('');
   const [successMessage, setSuccessMessage] = useState<string>('');
-  const [serverStatus, setServerStatus] = useState<boolean>(false);
 
   // Load current data on mount
   useEffect(() => {
     loadCurrentData();
-    checkServer();
   }, []);
-
-  const checkServer = async () => {
-    const isHealthy = await checkServerHealth();
-    setServerStatus(isHealthy);
-  };
 
   const loadCurrentData = async () => {
     try {
@@ -41,6 +33,20 @@ function App() {
       console.error('Error loading current data:', error);
       setCurrentData([]);
     }
+  };
+
+  const downloadJSON = (data: Pegawai[], filename: string = 'pegawai.json') => {
+    const jsonString = JSON.stringify(data, null, 2);
+    const blob = new Blob([jsonString], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   const handleFileSelect = async (file: File) => {
@@ -74,22 +80,18 @@ function App() {
     try {
       const mergedData = mergeData(currentData, excelData);
       
-      // Upload ke GitHub
-      const uploadResult = await uploadToGitHub(mergedData, 'pegawai.json');
-      
-      if (!uploadResult.success) {
-        throw new Error(uploadResult.error || 'Gagal mengupload ke GitHub');
-      }
-      
       // Update local state
       setCurrentData(mergedData);
       
       // Simpan ke localStorage sebagai backup
       localStorage.setItem('pegawai-data', JSON.stringify(mergedData));
       
+      // Download file JSON
+      downloadJSON(mergedData, 'pegawai.json');
+      
       const { newEmployees, updatedEmployees } = previewData;
       setSuccessMessage(
-        `Berhasil mengupload ke GitHub! ${newEmployees.length} data baru ditambahkan, ${updatedEmployees.length} data diperbarui.`
+        `Berhasil memproses data! ${newEmployees.length} data baru ditambahkan, ${updatedEmployees.length} data diperbarui. File JSON telah didownload.`
       );
       setState('success');
     } catch (error) {
@@ -141,12 +143,6 @@ function App() {
               </span>
             </div>
             <div className="flex items-center space-x-4">
-              <div className="flex items-center">
-                <div className={`w-2 h-2 rounded-full mr-2 ${serverStatus ? 'bg-green-500' : 'bg-red-500'}`}></div>
-                <span className="text-xs text-gray-500">
-                  Server {serverStatus ? 'Online' : 'Offline'}
-                </span>
-              </div>
               <button
                 onClick={loadCurrentData}
                 className="text-blue-600 hover:text-blue-700 text-sm flex items-center"
@@ -178,19 +174,31 @@ function App() {
 
           {state === 'success' && (
             <div className="text-center py-8">
-              <CheckCircle className="w-16 h-16 text-green-600 mx-auto mb-4" />
+              <div className="flex justify-center items-center mb-4">
+                <CheckCircle className="w-16 h-16 text-green-600 mr-2" />
+                <Download className="w-12 h-12 text-blue-600" />
+              </div>
               <h2 className="text-2xl font-semibold text-gray-900 mb-2">
-                Upload ke GitHub Berhasil!
+                Data Berhasil Diproses!
               </h2>
               <p className="text-gray-600 mb-6 max-w-md mx-auto">
                 {successMessage}
               </p>
-              <button
-                onClick={handleReset}
-                className="btn-primary"
-              >
-                Upload File Lain
-              </button>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <button
+                  onClick={() => downloadJSON(currentData, 'pegawai.json')}
+                  className="btn-secondary flex items-center justify-center"
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  Download Ulang
+                </button>
+                <button
+                  onClick={handleReset}
+                  className="btn-primary"
+                >
+                  Upload File Lain
+                </button>
+              </div>
             </div>
           )}
 
@@ -217,11 +225,7 @@ function App() {
         <div className="text-center mt-8 text-sm text-gray-500">
           <p>
             Pastikan file Excel memiliki kolom: Nama, NIP, Golongan, Jabatan<br/>
-            {!serverStatus && (
-              <span className="text-red-500">
-                ⚠️ Server offline - jalankan: npm run server
-              </span>
-            )}
+            File JSON akan otomatis terdownload setelah proses selesai
           </p>
         </div>
       </div>

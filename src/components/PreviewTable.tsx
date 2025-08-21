@@ -166,6 +166,7 @@ const PreviewTable: React.FC<PreviewTableProps> = ({
           disabled={isUpdating}
         >
           {isUpdating ? 'Menyimpan...' : 'Konfirmasi & Simpan'}
+          {isUpdating ? 'Memproses...' : 'Konfirmasi & Download'}
         </button>
       </div>
     </div>

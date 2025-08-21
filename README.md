@@ -1,69 +1,47 @@
-# pegawai-json
+# Pegawai Excel Updater
 
-Aplikasi untuk update data pegawai dengan auto upload ke GitHub.
-
-## Setup GitHub Integration
-
-1. **Buat GitHub Personal Access Token:**
-   - Buka https://github.com/settings/tokens
-   - Klik "Generate new token" → "Generate new token (classic)"
-   - Beri nama token (misal: "Pegawai Data Updater")
-   - Pilih scope: `repo` (full control of private repositories)
-   - Set expiration sesuai kebutuhan (recommended: 90 days atau No expiration)
-   - Klik "Generate token"
-   - Copy token yang dihasilkan
-
-2. **Setup Environment Variables:**
-   ```bash
-   cp .env.example .env
-   ```
-   
-   Edit file `.env` dan isi dengan data yang benar:
-   ```env
-   GITHUB_TOKEN=ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-   GITHUB_OWNER=username_github_anda
-   GITHUB_REPO=nama_repository_anda
-   GITHUB_BRANCH=main
-   PORT=3001
-   ```
-   
-   **PENTING:** 
-   - `GITHUB_TOKEN`: Token yang baru saja dibuat (dimulai dengan `ghp_`)
-   - `GITHUB_OWNER`: Username GitHub Anda (bukan email)
-   - `GITHUB_REPO`: Nama repository yang sudah ada di GitHub
-   - Pastikan repository sudah dibuat di GitHub sebelum menjalankan aplikasi
-
-3. **Install Dependencies:**
-   ```bash
-   npm install
-   ```
-
-4. **Jalankan Aplikasi:**
-   ```bash
-   # Jalankan frontend dan backend sekaligus
-   npm run dev:full
-   
-   # Atau jalankan terpisah:
-   # Terminal 1: Backend
-   npm run server
-   
-   # Terminal 2: Frontend  
-   npm run dev
-   ```
-
-## Cara Penggunaan
-
-1. Pastikan server backend berjalan (indikator hijau di aplikasi)
-2. Upload file Excel dengan kolom: Nama, NIP, Golongan, Jabatan
-3. Review preview data yang akan diupdate
-4. Klik "Konfirmasi & Simpan" 
-5. Data akan otomatis terupload ke GitHub repository
+Aplikasi untuk update data pegawai dengan download file JSON hasil.
 
 ## Fitur
 
 - ✅ Upload file Excel
 - ✅ Preview data sebelum update
-- ✅ Auto upload ke GitHub
+- ✅ Auto download file JSON hasil
 - ✅ Backup ke localStorage
 - ✅ Responsive design
-- ✅ Real-time server status
+
+## Cara Penggunaan
+
+1. **Install Dependencies:**
+   ```bash
+   npm install
+   ```
+
+2. **Jalankan Aplikasi:**
+   ```bash
+   npm run dev
+   ```
+
+3. **Upload dan Proses:**
+   - Upload file Excel dengan kolom: Nama, NIP, Golongan, Jabatan
+   - Review preview data yang akan diupdate
+   - Klik "Konfirmasi & Download"
+   - File JSON akan otomatis terdownload
+   - Upload manual file JSON ke GitHub repository Anda
+
+## Format Excel
+
+File Excel harus memiliki kolom dengan urutan:
+1. **Nama** - Nama lengkap pegawai
+2. **NIP** - Nomor Induk Pegawai
+3. **Golongan** - Golongan kepangkatan
+4. **Jabatan** - Jabatan pegawai
+
+## Output
+
+Aplikasi akan menghasilkan file `pegawai.json` yang berisi:
+- Data pegawai yang sudah ada (diperbarui jika ada perubahan)
+- Data pegawai baru dari file Excel
+- Data diurutkan berdasarkan nama
+
+File JSON ini siap untuk diupload ke GitHub repository Anda.
