@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Database, CheckCircle, AlertCircle, RefreshCw, Download } from 'lucide-react';
 import FileUpload from './components/FileUpload';
 import PreviewTable from './components/PreviewTable';
