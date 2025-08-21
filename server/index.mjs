@@ -27,6 +27,22 @@ const octokit = new Octokit({
 // Upload file to GitHub
 app.post('/api/upload-to-github', async (req, res) => {
   try {
+    // Check if required environment variables are set
+    if (!process.env.GITHUB_TOKEN || !process.env.GITHUB_OWNER || !process.env.GITHUB_REPO) {
+      return res.status(400).json({
+        success: false,
+        error: 'GitHub credentials tidak lengkap. Pastikan GITHUB_TOKEN, GITHUB_OWNER, dan GITHUB_REPO sudah diset di file .env'
+      });
+    }
+
+    // Validate GitHub configuration
+    if (!process.env.GITHUB_TOKEN || !process.env.GITHUB_OWNER || !process.env.GITHUB_REPO) {
+      return res.status(400).json({
+        success: false,
+        error: 'GitHub configuration tidak lengkap. Periksa GITHUB_TOKEN, GITHUB_OWNER, dan GITHUB_REPO di file .env'
+      });
+    }
+
     console.log('Upload request received:', { filename: req.body.filename });
     
     const { content, filename, message } = req.body;

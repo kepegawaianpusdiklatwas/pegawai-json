@@ -6,8 +6,10 @@ Aplikasi untuk update data pegawai dengan auto upload ke GitHub.
 
 1. **Buat GitHub Personal Access Token:**
    - Buka https://github.com/settings/tokens
-   - Generate new token (classic)
+   - Klik "Generate new token" → "Generate new token (classic)"
+   - Beri nama token (misal: "Pegawai Data Updater")
    - Pilih scope: `repo` (full control of private repositories)
+   - Klik "Generate token"
    - Copy token yang dihasilkan
 
 2. **Setup Environment Variables:**
