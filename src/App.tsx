@@ -66,19 +66,23 @@ function App() {
     try {
       const mergedData = mergeData(currentData, excelData);
       
-      // Simulate API call to update the JSON file
-      // In a real application, this would be an API call to your backend
-      const response = await fetch('/api/update-pegawai', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(mergedData),
-      });
+      // Simulasi penyimpanan data (dalam aplikasi nyata, ini akan menjadi API call)
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulasi delay
       
-      if (!response.ok) {
-        throw new Error('Gagal menyimpan data ke server');
-      }
+      // Simpan ke localStorage sebagai backup
+      localStorage.setItem('pegawai-data', JSON.stringify(mergedData));
+      
+      // Download file JSON yang sudah diupdate
+      const dataStr = JSON.stringify(mergedData, null, 2);
+      const dataBlob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(dataBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'pegawai-updated.json';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
       
       // Update local state
       setCurrentData(mergedData);
