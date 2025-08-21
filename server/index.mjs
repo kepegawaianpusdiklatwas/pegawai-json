@@ -96,6 +96,18 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Root route
+app.get('/', (req, res) => {
+  res.json({
+    message: 'GitHub Upload Server API',
+    status: 'running',
+    endpoints: {
+      health: '/api/health',
+      upload: '/api/upload-to-github'
+    }
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`🚀 Server berjalan di http://localhost:${PORT}`);
   console.log(`📁 GitHub: ${process.env.GITHUB_OWNER}/${process.env.GITHUB_REPO}`);
