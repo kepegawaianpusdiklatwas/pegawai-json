@@ -15,6 +15,7 @@ app.use(express.json({ limit: '10mb' }));
 // Add request logging
 app.use((req, res, next) => {
   console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
+  res.setHeader('Content-Type', 'application/json');
   next();
 });
 
@@ -26,6 +27,8 @@ const octokit = new Octokit({
 // Upload file to GitHub
 app.post('/api/upload-to-github', async (req, res) => {
   try {
+    console.log('Upload request received:', { filename: req.body.filename });
+    
     const { content, filename, message } = req.body;
 
     if (!content || !filename) {
@@ -75,6 +78,7 @@ app.post('/api/upload-to-github', async (req, res) => {
 
   } catch (error) {
     console.error('GitHub upload error:', error);
+    res.setHeader('Content-Type', 'application/json');
     res.status(500).json({
       success: false,
       error: error.message || 'Gagal mengupload ke GitHub'
@@ -84,6 +88,8 @@ app.post('/api/upload-to-github', async (req, res) => {
 
 // Health check
 app.get('/api/health', (req, res) => {
+  console.log('Health check requested');
+  res.setHeader('Content-Type', 'application/json');
   res.json({ 
     status: 'OK', 
     message: 'GitHub Upload Server berjalan',
@@ -98,6 +104,7 @@ app.get('/api/health', (req, res) => {
 
 // Root route
 app.get('/', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
   res.json({
     message: 'GitHub Upload Server API',
     status: 'running',
