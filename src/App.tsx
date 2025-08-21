@@ -4,6 +4,7 @@ import FileUpload from './components/FileUpload';
 import PreviewTable from './components/PreviewTable';
 import { Pegawai, PreviewData } from './types/pegawai';
 import { processExcelFile, generatePreview, mergeData } from './utils/excelProcessor';
+import { uploadToGitHub, checkServerHealth } from './services/githubService';
 
 type AppState = 'upload' | 'preview' | 'success' | 'error';
 
@@ -16,11 +17,18 @@ function App() {
   const [isUpdating, setIsUpdating] = useState(false);
   const [error, setError] = useState<string>('');
   const [successMessage, setSuccessMessage] = useState<string>('');
+  const [serverStatus, setServerStatus] = useState<boolean>(false);
 
   // Load current data on mount
   useEffect(() => {
     loadCurrentData();
+    checkServer();
   }, []);
+
+  const checkServer = async () => {
+    const isHealthy = await checkServerHealth();
+    setServerStatus(isHealthy);
+  };
 
   const loadCurrentData = async () => {
     try {
@@ -66,30 +74,22 @@ function App() {
     try {
       const mergedData = mergeData(currentData, excelData);
       
-      // Simulasi penyimpanan data (dalam aplikasi nyata, ini akan menjadi API call)
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulasi delay
+      // Upload ke GitHub
+      const uploadResult = await uploadToGitHub(mergedData, 'pegawai.json');
       
-      // Simpan ke localStorage sebagai backup
-      localStorage.setItem('pegawai-data', JSON.stringify(mergedData));
-      
-      // Download file JSON yang sudah diupdate
-      const dataStr = JSON.stringify(mergedData, null, 2);
-      const dataBlob = new Blob([dataStr], { type: 'application/json' });
-      const url = URL.createObjectURL(dataBlob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'pegawai-updated.json';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+      if (!uploadResult.success) {
+        throw new Error(uploadResult.error || 'Gagal mengupload ke GitHub');
+      }
       
       // Update local state
       setCurrentData(mergedData);
       
+      // Simpan ke localStorage sebagai backup
+      localStorage.setItem('pegawai-data', JSON.stringify(mergedData));
+      
       const { newEmployees, updatedEmployees } = previewData;
       setSuccessMessage(
-        `Berhasil memperbarui data pegawai! ${newEmployees.length} data baru ditambahkan, ${updatedEmployees.length} data diperbarui.`
+        `Berhasil mengupload ke GitHub! ${newEmployees.length} data baru ditambahkan, ${updatedEmployees.length} data diperbarui.`
       );
       setState('success');
     } catch (error) {
@@ -140,13 +140,21 @@ function App() {
                 Data saat ini: <strong>{currentData.length} pegawai</strong>
               </span>
             </div>
-            <button
-              onClick={loadCurrentData}
-              className="text-blue-600 hover:text-blue-700 text-sm flex items-center"
-            >
-              <RefreshCw className="w-4 h-4 mr-1" />
-              Refresh
-            </button>
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center">
+                <div className={`w-2 h-2 rounded-full mr-2 ${serverStatus ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                <span className="text-xs text-gray-500">
+                  Server {serverStatus ? 'Online' : 'Offline'}
+                </span>
+              </div>
+              <button
+                onClick={loadCurrentData}
+                className="text-blue-600 hover:text-blue-700 text-sm flex items-center"
+              >
+                <RefreshCw className="w-4 h-4 mr-1" />
+                Refresh
+              </button>
+            </div>
           </div>
         </div>
 
@@ -172,7 +180,7 @@ function App() {
             <div className="text-center py-8">
               <CheckCircle className="w-16 h-16 text-green-600 mx-auto mb-4" />
               <h2 className="text-2xl font-semibold text-gray-900 mb-2">
-                Berhasil!
+                Upload ke GitHub Berhasil!
               </h2>
               <p className="text-gray-600 mb-6 max-w-md mx-auto">
                 {successMessage}
@@ -208,7 +216,12 @@ function App() {
         {/* Footer */}
         <div className="text-center mt-8 text-sm text-gray-500">
           <p>
-            Pastikan file Excel memiliki kolom: Nama, NIP, Golongan, Jabatan
+            Pastikan file Excel memiliki kolom: Nama, NIP, Golongan, Jabatan<br/>
+            {!serverStatus && (
+              <span className="text-red-500">
+                ⚠️ Server offline - jalankan: npm run server
+              </span>
+            )}
           </p>
         </div>
       </div>
