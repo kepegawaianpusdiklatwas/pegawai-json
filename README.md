@@ -9,6 +9,7 @@ Aplikasi untuk update data pegawai dengan auto upload ke GitHub.
    - Klik "Generate new token" → "Generate new token (classic)"
    - Beri nama token (misal: "Pegawai Data Updater")
    - Pilih scope: `repo` (full control of private repositories)
+   - Set expiration sesuai kebutuhan (recommended: 90 days atau No expiration)
    - Klik "Generate token"
    - Copy token yang dihasilkan
 
@@ -17,14 +18,20 @@ Aplikasi untuk update data pegawai dengan auto upload ke GitHub.
    cp .env.example .env
    ```
    
-   Edit file `.env`:
+   Edit file `.env` dan isi dengan data yang benar:
    ```env
-   GITHUB_TOKEN=ghp_your_token_here
-   GITHUB_OWNER=your_username
-   GITHUB_REPO=pegawai-json
+   GITHUB_TOKEN=ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+   GITHUB_OWNER=username_github_anda
+   GITHUB_REPO=nama_repository_anda
    GITHUB_BRANCH=main
    PORT=3001
    ```
+   
+   **PENTING:** 
+   - `GITHUB_TOKEN`: Token yang baru saja dibuat (dimulai dengan `ghp_`)
+   - `GITHUB_OWNER`: Username GitHub Anda (bukan email)
+   - `GITHUB_REPO`: Nama repository yang sudah ada di GitHub
+   - Pastikan repository sudah dibuat di GitHub sebelum menjalankan aplikasi
 
 3. **Install Dependencies:**
    ```bash
