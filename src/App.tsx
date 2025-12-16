@@ -16,6 +16,7 @@ function App() {
   const [isUpdating, setIsUpdating] = useState(false);
   const [error, setError] = useState<string>('');
   const [successMessage, setSuccessMessage] = useState<string>('');
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
 
   // Load current data on mount
   useEffect(() => {
@@ -116,6 +117,18 @@ function App() {
     setState('upload');
   };
 
+  const handleClearAllData = () => {
+    setCurrentData([]);
+    localStorage.removeItem('pegawai-data');
+    setShowClearConfirm(false);
+    setSuccessMessage('Semua data berhasil dihapus!');
+    setState('success');
+  };
+
+  const handleCancelClear = () => {
+    setShowClearConfirm(false);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8 max-w-6xl">
@@ -150,9 +163,58 @@ function App() {
                 <RefreshCw className="w-4 h-4 mr-1" />
                 Refresh
               </button>
+              <button
+                onClick={() => setShowClearConfirm(true)}
+                className="text-red-600 hover:text-red-700 text-sm flex items-center"
+                disabled={currentData.length === 0}
+              >
+                <span className="w-4 h-4 mr-1">🗑️</span>
+                Clear All
+              </button>
             </div>
           </div>
         </div>
+
+        {/* Clear Confirmation Modal */}
+        {showClearConfirm && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mr-4">
+                  <span className="text-2xl">⚠️</span>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    Hapus Semua Data?
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    Tindakan ini tidak dapat dibatalkan
+                  </p>
+                </div>
+              </div>
+              
+              <p className="text-gray-700 mb-6">
+                Anda akan menghapus <strong>{currentData.length} data pegawai</strong>. 
+                Semua data akan hilang permanen dari sistem.
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-3 justify-end">
+                <button
+                  onClick={handleCancelClear}
+                  className="btn-secondary"
+                >
+                  Batal
+                </button>
+                <button
+                  onClick={handleClearAllData}
+                  className="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
+                >
+                  Ya, Hapus Semua
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Main Content */}
         <div className="card p-6">
@@ -197,6 +259,13 @@ function App() {
                   className="btn-primary"
                 >
                   Upload File Lain
+                </button>
+                <button
+                  onClick={() => setShowClearConfirm(true)}
+                  className="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center"
+                >
+                  <span className="w-4 h-4 mr-2">🗑️</span>
+                  Clear All Data
                 </button>
               </div>
             </div>
