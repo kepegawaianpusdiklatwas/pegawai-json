@@ -74,26 +74,33 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, isProcessing }) =
       <div className="mt-4 text-sm text-gray-600">
         <p className="font-medium mb-2">Format Excel yang diharapkan:</p>
         <div className="bg-gray-50 p-3 rounded border text-xs">
-          <div className="grid grid-cols-4 gap-2 font-medium border-b pb-1 mb-1 text-gray-800">
-            <span>Nama</span>
-            <span>NIP</span>
-            <span>Golongan</span>
-            <span>Jabatan</span>
+          <div className="space-y-1">
+            <div className="font-medium text-gray-800 border-b pb-1 mb-2">Posisi Kolom Excel:</div>
+            <div className="grid grid-cols-2 gap-4 text-gray-600">
+              <div>• Kolom B (2): NIP</div>
+              <div>• Kolom C (3): Nama</div>
+              <div>• Kolom K (11): Golongan</div>
+              <div>• Kolom N (14): Jabatan</div>
+            </div>
           </div>
-          <div className="grid grid-cols-4 gap-2 text-gray-600">
-            <span>Abdul Kodir</span>
-            <span>19760420 202521 1 022</span>
-            <span>III/a</span>
-            <span>Pengelola Umum Operasional</span>
+        </div>
+        <div className="bg-blue-50 p-3 rounded border text-xs mt-2">
+          <div className="font-medium text-blue-800 mb-1">Contoh Data:</div>
+          <div className="text-blue-700">
+            <div>• NIP: 19760420202521022 (tanpa spasi)</div>
+            <div>• Nama: Abdul Kodir</div>
+            <div>• Golongan: III/a</div>
+            <div>• Jabatan: Pengelola Umum Operasional</div>
           </div>
         </div>
         <div className="mt-2 text-xs text-red-600">
           <p><strong>Penting:</strong></p>
           <ul className="list-disc list-inside space-y-1">
-            <li>Kolom harus berurutan: Nama (A), NIP (B), Golongan (C), Jabatan (D)</li>
+            <li>NIP diambil dari kolom B (2), Nama dari kolom C (3)</li>
+            <li>Golongan diambil dari kolom K (11), Jabatan dari kolom N (14)</li>
             <li>Baris pertama adalah header, data dimulai dari baris kedua</li>
-            <li>Pastikan tidak ada kolom kosong di antara data</li>
-            <li>Format NIP harus lengkap dengan spasi (contoh: 19760420 202521 1 022)</li>
+            <li>NIP akan otomatis dihapus spasinya</li>
+            <li>Pastikan kolom yang diperlukan tidak kosong</li>
           </ul>
         </div>
       </div>

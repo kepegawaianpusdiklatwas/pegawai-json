@@ -26,19 +26,23 @@ export const processExcelFile = (file: File): Promise<Pegawai[]> => {
           // Skip empty rows
           if (!row || row.length === 0 || !row[0]) continue;
           
-          // Pastikan semua kolom ada dan tidak undefined
+          // Mapping kolom sesuai pengaturan:
+          // NIP: kolom 2 (index 1) - tanpa spasi
+          // Nama: kolom 3 (index 2)
+          // Golongan: kolom 11 (index 10)
+          // Jabatan: kolom 14 (index 13)
           const employee: Pegawai = {
-            Nama: row[0] ? String(row[0]).trim() : '',
-            NIP: row[1] ? String(row[1]).trim() : '',
-            Golongan: row[2] ? String(row[2]).trim() : '',
-            Jabatan: row[3] ? String(row[3]).trim() : ''
+            NIP: row[1] ? String(row[1]).trim().replace(/\s+/g, '') : '',
+            Nama: row[2] ? String(row[2]).trim() : '',
+            Golongan: row[10] ? String(row[10]).trim() : '',
+            Jabatan: row[13] ? String(row[13]).trim() : ''
           };
           
-          // Validasi data - pastikan minimal Nama dan NIP ada
+          // Validasi data - pastikan minimal NIP dan Nama ada
           if (employee.Nama.length > 0 && employee.NIP.length > 0) {
             employees.push(employee);
           } else {
-            console.warn(`Baris ${i + 1} dilewati: Nama="${employee.Nama}", NIP="${employee.NIP}"`);
+            console.warn(`Baris ${i + 1} dilewati: NIP="${employee.NIP}", Nama="${employee.Nama}"`);
           }
         }
         
