@@ -29,12 +29,12 @@ export const processExcelFile = (file: File): Promise<Pegawai[]> => {
           // Mapping kolom sesuai pengaturan:
           // NIP: kolom 2 (index 1) - tanpa spasi
           // Nama: kolom 3 (index 2)
-          // Golongan: kolom 11 (index 10)
+          // Golongan: kolom 10 (index 9)
           // Jabatan: kolom 14 (index 13)
           const employee: Pegawai = {
             NIP: row[1] ? String(row[1]).trim().replace(/\s+/g, '') : '',
             Nama: row[2] ? String(row[2]).trim() : '',
-            Golongan: row[10] ? String(row[10]).trim() : '',
+            Golongan: row[9] ? String(row[9]).trim() : '',
             Jabatan: row[13] ? String(row[13]).trim() : ''
           };
           

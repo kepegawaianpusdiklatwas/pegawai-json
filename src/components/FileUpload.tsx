@@ -78,7 +78,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, isProcessing }) =
             <div className="font-medium text-gray-800 border-b pb-1 mb-2">Posisi Kolom Excel:</div>
             <div className="grid grid-cols-2 gap-4 text-gray-600">
               <div>• Kolom B (2): NIP</div>
-              <div>• Kolom C (3): Nama</div>
+                <div>• Kolom J (10): Golongan</div>
               <div>• Kolom K (11): Golongan</div>
               <div>• Kolom N (14): Jabatan</div>
             </div>
