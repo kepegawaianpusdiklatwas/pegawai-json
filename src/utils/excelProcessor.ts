@@ -32,8 +32,8 @@ export const processExcelFile = (file: File): Promise<Pegawai[]> => {
           // Golongan: kolom 10 (index 9)
           // Jabatan: kolom 14 (index 13)
           const employee: Pegawai = {
-            NIP: row[1] ? String(row[1]).trim().replace(/\s+/g, '') : '',
             Nama: row[2] ? String(row[2]).trim() : '',
+            NIP: row[1] ? String(row[1]).trim().replace(/\s+/g, '') : '',
             Golongan: row[9] ? String(row[9]).trim() : '',
             Jabatan: row[13] ? String(row[13]).trim() : ''
           };

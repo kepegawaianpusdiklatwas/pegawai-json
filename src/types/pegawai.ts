@@ -1,6 +1,6 @@
 export interface Pegawai {
   Nama: string;
-  NIP: string;
+  Nama: string;
   Golongan: string;
   Jabatan: string;
 }
