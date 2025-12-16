@@ -74,18 +74,27 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, isProcessing }) =
       <div className="mt-4 text-sm text-gray-600">
         <p className="font-medium mb-2">Format Excel yang diharapkan:</p>
         <div className="bg-gray-50 p-3 rounded border text-xs">
-          <div className="grid grid-cols-4 gap-2 font-medium border-b pb-1 mb-1">
+          <div className="grid grid-cols-4 gap-2 font-medium border-b pb-1 mb-1 text-gray-800">
             <span>Nama</span>
             <span>NIP</span>
             <span>Golongan</span>
             <span>Jabatan</span>
           </div>
           <div className="grid grid-cols-4 gap-2 text-gray-600">
-            <span>John Doe</span>
-            <span>123456789</span>
+            <span>Abdul Kodir</span>
+            <span>19760420 202521 1 022</span>
             <span>III/a</span>
-            <span>Staff</span>
+            <span>Pengelola Umum Operasional</span>
           </div>
+        </div>
+        <div className="mt-2 text-xs text-red-600">
+          <p><strong>Penting:</strong></p>
+          <ul className="list-disc list-inside space-y-1">
+            <li>Kolom harus berurutan: Nama (A), NIP (B), Golongan (C), Jabatan (D)</li>
+            <li>Baris pertama adalah header, data dimulai dari baris kedua</li>
+            <li>Pastikan tidak ada kolom kosong di antara data</li>
+            <li>Format NIP harus lengkap dengan spasi (contoh: 19760420 202521 1 022)</li>
+          </ul>
         </div>
       </div>
     </div>

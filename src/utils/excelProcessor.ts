@@ -26,16 +26,19 @@ export const processExcelFile = (file: File): Promise<Pegawai[]> => {
           // Skip empty rows
           if (!row || row.length === 0 || !row[0]) continue;
           
+          // Pastikan semua kolom ada dan tidak undefined
           const employee: Pegawai = {
-            Nama: String(row[0] || '').trim(),
-            NIP: String(row[1] || '').trim(),
-            Golongan: String(row[2] || '').trim(),
-            Jabatan: String(row[3] || '').trim()
+            Nama: row[0] ? String(row[0]).trim() : '',
+            NIP: row[1] ? String(row[1]).trim() : '',
+            Golongan: row[2] ? String(row[2]).trim() : '',
+            Jabatan: row[3] ? String(row[3]).trim() : ''
           };
           
-          // Skip jika data penting kosong
-          if (employee.Nama && employee.NIP) {
+          // Validasi data - pastikan minimal Nama dan NIP ada
+          if (employee.Nama.length > 0 && employee.NIP.length > 0) {
             employees.push(employee);
+          } else {
+            console.warn(`Baris ${i + 1} dilewati: Nama="${employee.Nama}", NIP="${employee.NIP}"`);
           }
         }
         
