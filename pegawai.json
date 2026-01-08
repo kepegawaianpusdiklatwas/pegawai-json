@@ -84,6 +84,12 @@
     "Jabatan": "Auditor Ahli Muda"
   },
   {
+    "Nama": "Adithia Ramadhan",
+    "NIP": "198904122014021001",
+    "Golongan": "III/c",
+    "Jabatan": "Auditor Ahli Pertama"
+  },
+  {
     "Nama": "Aditya Rahman Adil",
     "NIP": "198607272014021001",
     "Golongan": "III/d",
@@ -194,7 +200,7 @@
   {
     "Nama": "Anisa Anjarsari",
     "NIP": "199812242022022001",
-    "Golongan": "II/c",
+    "Golongan": "II/d",
     "Jabatan": "Auditor Terampil"
   },
   {
@@ -214,6 +220,12 @@
     "NIP": "198908302012121001",
     "Golongan": "III/b",
     "Jabatan": "Analis Pengelolaan Keuangan APBN Ahli Pertama"
+  },
+  {
+    "Nama": "Bayu Maula Anhar",
+    "NIP": "199011092012101001",
+    "Golongan": "III/b",
+    "Jabatan": "Auditor Ahli Pertama"
   },
   {
     "Nama": "Bibit Sulardi",
@@ -420,6 +432,12 @@
     "Jabatan": "Auditor Penyelia"
   },
   {
+    "Nama": "Gadis Fithri Afiana",
+    "NIP": "198702072008012002",
+    "Golongan": "III/c",
+    "Jabatan": "Auditor Ahli Pertama"
+  },
+  {
     "Nama": "Gatot April Al Qodri",
     "NIP": "197704072025211017",
     "Golongan": "V",
@@ -512,7 +530,7 @@
   {
     "Nama": "Ika Mardiana Septilianasari",
     "NIP": "198909272012102001",
-    "Golongan": "III/b",
+    "Golongan": "III/c",
     "Jabatan": "Auditor Ahli Muda"
   },
   {
@@ -1010,7 +1028,7 @@
   {
     "Nama": "Suri Warajati",
     "NIP": "198408162006022001",
-    "Golongan": "III/d",
+    "Golongan": "IV/a",
     "Jabatan": "Auditor Ahli Madya selaku Koordinator Penyelenggaraan Pendidikan dan Pelatihan Pengawasan"
   },
   {
